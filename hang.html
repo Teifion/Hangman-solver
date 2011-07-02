@@ -28,27 +28,35 @@
                 return result + subject.substring (oldi, subject.length);
             }
             
-            // Accepts both _ and * as wildcards
+            function attempt (pattern, base_guess)
+            {
+                if (pattern.exec(guess) != null) return true;
+                if (pattern.exec(str_replace(", the", "", guess)) != null) return true;
+                if (pattern.exec(str_replace("&", "and", guess)) != null) return true;
+                if (pattern.exec(str_replace("&", "and", str_replace(", the", "", guess))) != null) return true;
+                return false;
+            }
+            
+            // Uses _ as blank characters, * as wildcards
             function solve ()
             {
                 var matches = new Array();
                 var t = document.getElementById('clue').value;
-                
-                var clue_length = t.length
+                var max_len = document.getElementById('len').value;
                 
                 // Build into regex
                 t = str_replace("_", "[a-z]", t)
-                t = str_replace("*", "[a-z]", t)
                 
+                console.log(t);
                 pattern = new RegExp(t, "i");
                 
                 for (var i = 0; i < word_list.length; i++)
                 {
                     guess = word_list[i];
                     
-                    if (guess.length == clue_length)
+                    if (max_len >= guess.length)
                     {
-                        if (pattern.exec(guess) != null)
+                        if (attempt(pattern, guess))
                         {
                             matches.push(guess);
                         }
@@ -65,9 +73,10 @@
             }
         </script>
     </head>
-    <body id="hang" onload="document.getElementById('clue').focus(); solve();">
+    <body id="hang" onload="document.getElementById('clue').focus();">
         <form action="#" method="post" accept-charset="utf-8" onsubmit="solve(); return false;">
-            <input type="text" id="clue" value="**p**" />
+            <label for="clue">Clue:</label> <input type="text" id="clue" value="A film name" /><br />
+            <label for="len">Max length:</label> <input type="text" id="len" value="999" size="4" /><br />
             
             <input type="submit" value="Solve" />
         </form>
