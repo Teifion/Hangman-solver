@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+        <title>Hangman solver</title>
+        <script type="text/javascript" charset="utf-8">
+            // Replace this with your actual word list
+            word_list = [
+                "apple",
+                "peach",
+                "pear",
+            ];
+            
+            // Function source: http://www.rdlt.com/javascript-str_replace-equivalent.html
+            function str_replace (search, replace, subject)
+            {
+                var result = "";
+                var  oldi = 0;
+                for (i = subject.indexOf (search); i > -1; i = subject.indexOf (search, i))
+                {
+                    result += subject.substring (oldi, i);
+                    result += replace;
+                    i += search.length;
+                    oldi = i;
+                }
+                return result + subject.substring (oldi, subject.length);
+            }
+            
+            // Accepts both _ and * as wildcards
+            function solve ()
+            {
+                var matches = new Array();
+                var t = document.getElementById('clue').value;
+                
+                var clue_length = t.length
+                
+                // Build into regex
+                t = str_replace("_", "[a-z]", t)
+                t = str_replace("*", "[a-z]", t)
+                
+                pattern = new RegExp(t, "i");
+                
+                for (var i = 0; i < word_list.length; i++)
+                {
+                    guess = word_list[i];
+                    
+                    if (guess.length == clue_length)
+                    {
+                        if (pattern.exec(guess) != null)
+                        {
+                            matches.push(guess);
+                        }
+                    }
+                }
+                
+                var output = "";
+                for (var i = 0; i < matches.length; i++)
+                {
+                    m = matches[i];
+                    output += m + "<br />";
+                }
+                document.getElementById('output').innerHTML = output;
+            }
+        </script>
+    </head>
+    <body id="hang" onload="document.getElementById('clue').focus(); solve();">
+        <form action="#" method="post" accept-charset="utf-8" onsubmit="solve(); return false;">
+            <input type="text" id="clue" value="**p**" />
+            
+            <input type="submit" value="Solve" />
+        </form>
+        <br />
+        <div id="output">
+            &nbsp;
+        </div>
+    </body>
+</html>
