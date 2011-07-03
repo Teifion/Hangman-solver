@@ -31,9 +31,10 @@
             function attempt (pattern, base_guess)
             {
                 if (pattern.exec(guess) != null) return true;
-                if (pattern.exec(str_replace(", the", "", guess)) != null) return true;
+                if (pattern.exec(str_replace("The ", "", guess)) != null) return true;
                 if (pattern.exec(str_replace("&", "and", guess)) != null) return true;
-                if (pattern.exec(str_replace("&", "and", str_replace(", the", "", guess))) != null) return true;
+                if (pattern.exec(str_replace("'", "", guess)) != null) return true;
+                if (pattern.exec(str_replace("&", "and", str_replace("The ", "", guess))) != null) return true;
                 return false;
             }
             
