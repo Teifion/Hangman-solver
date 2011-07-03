@@ -1,0 +1,4 @@
+We have games of Hangman at work and I figured that rather than relying on
+skill to win I could simply get a computer to guess for me. So far it just
+does films and there are probably edge cases of exact naming that it doesn't
+catch currently.
